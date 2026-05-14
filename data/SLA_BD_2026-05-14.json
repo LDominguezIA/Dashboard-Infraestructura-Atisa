@@ -1,0 +1,2107 @@
+{
+  "allData": {
+    "2026-3": [
+      {
+        "id": "mp47ho3456v",
+        "name": "Pip Sur",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho34vtr",
+        "name": "Pip Sur MT",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 96.67,
+            "tickets": 1,
+            "time": 400,
+            "dt": 1440
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho344jx",
+        "name": "Dos Lunas",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho34tea",
+        "name": "Prisma XVIII",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.4,
+            "tickets": 1,
+            "time": 0,
+            "dt": 60
+          }
+        ]
+      },
+      {
+        "id": "mp47ho343i0",
+        "name": "PIP SUR R1 CORRAL TALLER",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho34oks",
+        "name": "PIP SUR R3 CORRAL TALLER",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho34yhj",
+        "name": "PIP SUR R4 TRAILA RESIDENTE",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho34cw1",
+        "name": "TALLER",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35gg2",
+        "name": "UNISANTOS",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35icr",
+        "name": "ZONKEYS Oficinas",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 93.3,
+            "tickets": 1,
+            "time": 30,
+            "dt": 2880
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35f80",
+        "name": "HACIENDA AGUACALIENTE",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35oya",
+        "name": "TALLER COMEDOR",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35dx6",
+        "name": "COBRANZA",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": null,
+            "tickets": 1,
+            "time": 0,
+            "dt": 7200
+          },
+          {
+            "avail": null,
+            "tickets": 1,
+            "time": 0,
+            "dt": 7200
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35dkn",
+        "name": "CC PACIFICO",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": null,
+            "tickets": 1,
+            "time": 0,
+            "dt": 7200
+          },
+          {
+            "avail": null,
+            "tickets": 1,
+            "time": 0,
+            "dt": 7200
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35kuj",
+        "name": "PLAZA PACIFICO",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 93.3,
+            "tickets": 1,
+            "time": 30,
+            "dt": 2880
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35nhr",
+        "name": "AUDITORIO ZONKEYS",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho355ue",
+        "name": "DALIAS",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35lse",
+        "name": "RANCHO",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 95.83,
+            "tickets": 1,
+            "time": 0,
+            "dt": 1140
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35u7e",
+        "name": "RACABA",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 93.3,
+            "tickets": 1,
+            "time": 30,
+            "dt": 28880
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho35c10",
+        "name": "ATISA",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 96.6,
+            "tickets": 1,
+            "time": 0,
+            "dt": 1440
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho366hw",
+        "name": "ESPERANCE R1",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho367r9",
+        "name": "GATO BRONCO R1",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36wi2",
+        "name": "MISION VIEJO",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36dl8",
+        "name": "PLAZA DEL MAR",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36kxa",
+        "name": "TORRE CATALINA",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36tlw",
+        "name": "ATISA R2",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho365z0",
+        "name": "ESPERANCE R2",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36v5u",
+        "name": "ESPERANCE R3",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36ffb",
+        "name": "PIP SUR APTS02",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36qzu",
+        "name": "CRISTAL",
+        "desc": "Reloj Checador",
+        "cat": "Checador",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 93.3,
+            "tickets": 1,
+            "time": 150,
+            "dt": 2880
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 97.62,
+            "tickets": 1,
+            "time": 0,
+            "dt": 240
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36d1v",
+        "name": "Atisa",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36rc1",
+        "name": "Auditorio",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36lzy",
+        "name": "Racaba/Zonkeys",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 93.3,
+            "tickets": 1,
+            "time": 30,
+            "dt": 2880
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36lu1",
+        "name": "Clinica Santa CLarita",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36sqy",
+        "name": "Bosques de Otay",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36ado",
+        "name": "Gato Bronco",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36ir1",
+        "name": "Plaza del Mar",
+        "desc": "Servicio de Internet",
+        "cat": "Red",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36h4q",
+        "name": "Maquinaria",
+        "desc": "CCTV",
+        "cat": "NVR",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36zx9",
+        "name": "Auditorio Interior",
+        "desc": "CCTV",
+        "cat": "NVR",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36q75",
+        "name": "CCP",
+        "desc": "CCTV",
+        "cat": "NVR",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": null,
+            "tickets": 1,
+            "time": 0,
+            "dt": 7200
+          },
+          {
+            "avail": null,
+            "tickets": 0,
+            "time": 0,
+            "dt": 7200
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho36yab",
+        "name": "Almacen",
+        "desc": "CCTV",
+        "cat": "NVR",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho37oz8",
+        "name": "Atisa Interior",
+        "desc": "CCTV",
+        "cat": "NVR",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho372oy",
+        "name": "Atisa Exterior",
+        "desc": "CCTV",
+        "cat": "NVR",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 14.29,
+            "tickets": 1,
+            "time": 0,
+            "dt": 8640
+          }
+        ]
+      },
+      {
+        "id": "mp47ho37tb9",
+        "name": "Auditorio Exterior",
+        "desc": "CCTV",
+        "cat": "NVR",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho37poz",
+        "name": "Maquinaria Enfermeria",
+        "desc": "CCTV",
+        "cat": "NVR",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.8,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho373t2",
+        "name": "VSERVERRDS",
+        "desc": "Servidores",
+        "cat": "Servidores",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho37a52",
+        "name": "VSERVERDB",
+        "desc": "Servidores",
+        "cat": "Servidores",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho37ufc",
+        "name": "VSERVERBI",
+        "desc": "Servidores",
+        "cat": "Servidores",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho37ppp",
+        "name": "SERVERDC",
+        "desc": "Servidores",
+        "cat": "Servidores",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      },
+      {
+        "id": "mp47ho37t31",
+        "name": "DATTO",
+        "desc": "Servidores",
+        "cat": "Servidores",
+        "sla": 99.8,
+        "remediation": "",
+        "comments": "",
+        "weeks": [
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          },
+          {
+            "avail": 99.9,
+            "tickets": 0,
+            "time": 0,
+            "dt": 0
+          }
+        ]
+      }
+    ]
+  },
+  "weekDates": {
+    "2026-3": [
+      {
+        "label": "Semana 1",
+        "from": "2026-04-01",
+        "to": "2026-04-07"
+      },
+      {
+        "label": "Semana 2",
+        "from": "2026-04-08",
+        "to": "2026-04-14"
+      },
+      {
+        "label": "Semana 3",
+        "from": "2026-04-15",
+        "to": "2026-04-21"
+      },
+      {
+        "label": "Semana 4",
+        "from": "2026-04-22",
+        "to": "2026-04-28"
+      },
+      {
+        "label": "Semana 5",
+        "from": "2026-04-29",
+        "to": "2026-04-30"
+      }
+    ]
+  },
+  "cats": [
+    "Checador",
+    "NVR",
+    "Red",
+    "Servidores"
+  ],
+  "descs": [
+    "Servicio de Internet",
+    "Reloj Checador",
+    "CCTV",
+    "Servidores",
+    "Portal Web",
+    "Correo Electrónico",
+    "VPN",
+    "Base de Datos Oracle",
+    "Respaldos",
+    "ERP",
+    "CRM",
+    "Videoconferencia"
+  ],
+  "savedAt": "2026-05-14T22:09:52.053Z",
+  "v": "5"
+}
