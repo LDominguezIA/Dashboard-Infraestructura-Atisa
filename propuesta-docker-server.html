@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Propuesta — Servidor Docker ATISA</title>
+<style>
+:root {
+  --bg:      #020617;
+  --s1:      #0f172a;
+  --s2:      #0a0f1e;
+  --s3:      #131929;
+  --border:  #1e293b;
+  --border2: #2d3f5c;
+  --text:    #cbd5e1;
+  --muted:   #475569;
+  --cyan:    #06b6d4;
+  --emerald: #10b981;
+  --rose:    #f43f5e;
+  --amber:   #f59e0b;
+  --purple:  #8b5cf6;
+  --blue:    #3b82f6;
+  --white:   #f8fafc;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.6}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2)}
+
+/* HEADER HERO */
+.hero{background:linear-gradient(135deg,#020617 0%,#0a0f2e 50%,#020617 100%);padding:60px 48px 48px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 70% 50%,rgba(6,182,212,.07),transparent);pointer-events:none}
+.hero-tag{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);font-family:monospace;margin-bottom:14px}
+.hero h1{font-size:2.4rem;font-weight:800;color:var(--white);line-height:1.15;margin-bottom:10px;max-width:700px}
+.hero h1 span{color:var(--cyan)}
+.hero-sub{font-size:.95rem;color:var(--muted);max-width:580px;margin-bottom:28px}
+.hero-meta{display:flex;gap:28px;flex-wrap:wrap}
+.hero-meta span{font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.hero-meta .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald);flex-shrink:0}
+
+/* NAV */
+nav{background:var(--s2);border-bottom:1px solid var(--border);padding:0 48px;position:sticky;top:0;z-index:100;display:flex;gap:0;overflow-x:auto}
+nav a{display:block;padding:14px 18px;font-size:.72rem;letter-spacing:.05em;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s}
+nav a:hover,nav a.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+
+/* MAIN */
+main{max-width:1200px;margin:0 auto;padding:48px}
+
+/* SECCIONES */
+section{margin-bottom:64px}
+.sec-label{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);font-family:monospace;margin-bottom:6px}
+.sec-title{font-size:1.5rem;font-weight:700;color:var(--white);margin-bottom:6px}
+.sec-desc{font-size:.85rem;color:var(--muted);margin-bottom:28px;max-width:640px}
+hr.sec{border:none;border-top:1px solid var(--border);margin-bottom:28px}
+
+/* COMPARATIVO ANTES/DESPUÉS */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px}
+.compare-card{background:var(--s1);border:1px solid var(--border);padding:24px}
+.compare-card.before{border-top:3px solid var(--rose)}
+.compare-card.after{border-top:3px solid var(--emerald)}
+.compare-card h3{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.compare-card.before h3{color:var(--rose)}
+.compare-card.after h3{color:var(--emerald)}
+.compare-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:.8rem}
+.compare-item .icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0;margin-top:1px}
+.icon-bad{background:rgba(244,63,94,.15);color:var(--rose);border:1px solid rgba(244,63,94,.3)}
+.icon-good{background:rgba(16,185,129,.15);color:var(--emerald);border:1px solid rgba(16,185,129,.3)}
+.compare-item p{color:var(--text);line-height:1.5}
+.compare-item p b{color:var(--white)}
+
+/* ARQUITECTURA DIAGRAM */
+.arch-diagram{background:var(--s3);border:1px solid var(--border);padding:32px;margin-bottom:32px;overflow-x:auto}
+.arch-row{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin-bottom:12px}
+.arch-box{background:var(--s1);border:1px solid var(--border2);padding:12px 18px;text-align:center;min-width:140px}
+.arch-box .ab-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.arch-box .ab-name{font-size:.82rem;font-weight:700;color:var(--white)}
+.arch-box .ab-sub{font-size:.62rem;color:var(--muted);margin-top:2px;font-family:monospace}
+.arch-box.cyan{border-color:rgba(6,182,212,.5);background:rgba(6,182,212,.06)}
+.arch-box.cyan .ab-name{color:var(--cyan)}
+.arch-box.emerald{border-color:rgba(16,185,129,.5);background:rgba(16,185,129,.06)}
+.arch-box.emerald .ab-name{color:var(--emerald)}
+.arch-box.purple{border-color:rgba(139,92,246,.5);background:rgba(139,92,246,.06)}
+.arch-box.purple .ab-name{color:var(--purple)}
+.arch-box.amber{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.06)}
+.arch-box.amber .ab-name{color:var(--amber)}
+.arch-box.blue{border-color:rgba(59,130,246,.5);background:rgba(59,130,246,.06)}
+.arch-box.blue .ab-name{color:var(--blue)}
+.arch-arrow{color:var(--muted);padding:0 8px;font-size:1rem;flex-shrink:0}
+.arch-arrow.down{transform:rotate(90deg);display:block;text-align:center;margin:4px auto}
+.arch-layer{text-align:center;margin-bottom:6px}
+.arch-layer-label{display:inline-block;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--s2);border:1px solid var(--border);padding:3px 14px;margin-bottom:10px}
+.arch-group{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.arch-divider{width:100%;border-top:1px dashed var(--border2);margin:16px 0;position:relative}
+.arch-divider span{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--s3);padding:0 10px;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--border2)}
+
+/* STACK CARDS */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:32px}
+.stack-card{background:var(--s1);border:1px solid var(--border);padding:18px}
+.stack-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.stack-icon{width:32px;height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.stack-card h3{font-size:.82rem;font-weight:700;color:var(--white)}
+.stack-card p{font-size:.75rem;color:var(--muted);line-height:1.6}
+.stack-card .version{font-family:monospace;font-size:.62rem;color:var(--cyan);margin-top:6px}
+
+/* PASOS */
+.steps{counter-reset:step}
+.step{display:flex;gap:20px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.step:last-child{border-bottom:none;margin-bottom:0}
+.step-num{counter-increment:step;width:36px;height:36px;border-radius:50%;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.4);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--cyan);flex-shrink:0;font-family:monospace}
+.step-body h3{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:4px}
+.step-body p{font-size:.78rem;color:var(--muted);line-height:1.7;margin-bottom:8px}
+.step-body code{font-family:monospace;font-size:.75rem;background:var(--s3);border:1px solid var(--border);padding:1px 6px;color:var(--cyan)}
+
+/* CODE BLOCK */
+pre{background:var(--s3);border:1px solid var(--border);padding:16px 20px;overflow-x:auto;font-family:'Cascadia Code','Consolas',monospace;font-size:.75rem;line-height:1.7;color:#94a3b8;margin:10px 0}
+pre .c{color:#475569}
+pre .k{color:var(--cyan)}
+pre .s{color:var(--emerald)}
+pre .n{color:#f59e0b}
+
+/* TABLA */
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+th{text-align:left;padding:10px 14px;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);font-weight:600}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,.02)}
+.td-mono{font-family:monospace;font-size:.72rem;color:var(--cyan)}
+.td-muted{color:var(--muted)}
+
+/* BADGES */
+.badge{font-size:.62rem;font-weight:700;padding:3px 10px;letter-spacing:.05em;border:1px solid;font-family:monospace;display:inline-block}
+.b-cyan{color:var(--cyan);border-color:rgba(6,182,212,.35);background:rgba(6,182,212,.08)}
+.b-emerald{color:var(--emerald);border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.08)}
+.b-amber{color:var(--amber);border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.08)}
+.b-purple{color:var(--purple);border-color:rgba(139,92,246,.35);background:rgba(139,92,246,.08)}
+.b-rose{color:var(--rose);border-color:rgba(244,63,94,.35);background:rgba(244,63,94,.08)}
+.b-blue{color:var(--blue);border-color:rgba(59,130,246,.35);background:rgba(59,130,246,.08)}
+
+/* ALERT */
+.alert{padding:14px 18px;border-left:3px solid;margin:14px 0;font-size:.78rem;line-height:1.7}
+.alert-cyan{border-color:var(--cyan);background:rgba(6,182,212,.06);color:var(--text)}
+.alert-emerald{border-color:var(--emerald);background:rgba(16,185,129,.06);color:var(--text)}
+.alert-amber{border-color:var(--amber);background:rgba(245,158,11,.06);color:var(--text)}
+.alert b{color:var(--white)}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:1px;background:var(--border2)}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-dot{position:absolute;left:-24px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--border2);background:var(--bg)}
+.tl-dot.done{border-color:var(--emerald);background:rgba(16,185,129,.2)}
+.tl-dot.active{border-color:var(--cyan);background:rgba(6,182,212,.2);box-shadow:0 0 8px rgba(6,182,212,.4)}
+.tl-dot.next{border-color:var(--amber);background:rgba(245,158,11,.1)}
+.tl-content h4{font-size:.82rem;font-weight:700;color:var(--white);margin-bottom:3px}
+.tl-content p{font-size:.75rem;color:var(--muted)}
+.tl-tag{font-size:.58rem;font-family:monospace;letter-spacing:.08em;padding:2px 8px;border:1px solid;display:inline-block;margin-bottom:6px}
+.tl-tag.fase1{color:var(--emerald);border-color:rgba(16,185,129,.3)}
+.tl-tag.fase2{color:var(--cyan);border-color:rgba(6,182,212,.3)}
+.tl-tag.fase3{color:var(--purple);border-color:rgba(139,92,246,.3)}
+
+/* COST CARDS */
+.cost-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.cost-card{background:var(--s1);border:1px solid var(--border);padding:22px}
+.cost-card.recommended{border-color:rgba(6,182,212,.4)}
+.cost-card h3{font-size:.85rem;font-weight:700;color:var(--white);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.cost-price{font-size:1.6rem;font-weight:800;color:var(--cyan);margin:10px 0 4px;font-family:monospace}
+.cost-price span{font-size:.75rem;color:var(--muted);font-weight:400}
+.cost-card ul{list-style:none;font-size:.75rem;color:var(--muted);line-height:1.9}
+.cost-card li::before{content:'→ ';color:var(--border2)}
+.cost-card li.ok::before{content:'✓ ';color:var(--emerald)}
+.cost-card li.bad::before{content:'✕ ';color:var(--rose)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:28px 48px;text-align:center;font-size:.7rem;color:var(--muted);line-height:2}
+footer span{color:var(--cyan)}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Propuesta Técnica · Mayo 2026</div>
+  <h1>Servidor Docker<br><span>Multi-Proyecto ATISA</span></h1>
+  <p class="hero-sub">Migración del Dashboard SLA standalone a infraestructura Docker con datos centralizados, acceso compartido para el equipo NOC y soporte para múltiples proyectos.</p>
+  <div class="hero-meta">
+    <span><span class="dot"></span> Preparado por: L. Domínguez — ldominguez@atisa.com</span>
+    <span><span class="dot" style="background:var(--cyan)"></span> 15 Mayo 2026</span>
+    <span><span class="dot" style="background:var(--purple)"></span> ATISA Group · Infraestructura TI</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#problema">01 Problema</a>
+  <a href="#solucion">02 Solución</a>
+  <a href="#arquitectura">03 Arquitectura</a>
+  <a href="#stack">04 Stack</a>
+  <a href="#implementacion">05 Implementación</a>
+  <a href="#proyectos">06 Proyectos</a>
+  <a href="#servidor">07 Servidor</a>
+  <a href="#roadmap">08 Roadmap</a>
+</nav>
+
+<main>
+
+  <!-- 01 PROBLEMA -->
+  <section id="problema">
+    <div class="sec-label">01 — Situación actual</div>
+    <div class="sec-title">¿Por qué migrar?</div>
+    <div class="sec-desc">El dashboard actual funciona perfectamente como archivo local, pero tiene limitaciones críticas para trabajo en equipo.</div>
+
+    <div class="compare">
+      <div class="compare-card before">
+        <h3>✕ Estado Actual — HTML Local</h3>
+        <div class="compare-item">
+          <div class="icon icon-bad">✕</div>
+          <p><b>Datos aislados por máquina.</b> Cada computadora del NOC tiene su propia base de datos. Si alguien ingresa datos en su PC, los demás no los ven.</p>
+        </div>
+        <div class="compare-item">
+          <div class="icon icon-bad">✕</div>
+          <p><b>Sin acceso remoto.</b> Para ver el dashboard hay que estar físicamente en la PC donde está el archivo.</p>
+        </div>
+        <div class="compare-item">
+          <div class="icon icon-bad">✕</div>
+          <p><b>Distribución manual.</b> Actualizar el dashboard significa enviar el archivo por correo/USB a cada equipo.</p>
+        </div>
+        <div class="compare-item">
+          <div class="icon icon-bad">✕</div>
+          <p><b>Sin respaldo automático.</b> Si falla la PC, se pierden todos los datos históricos del SLA.</p>
+        </div>
+        <div class="compare-item">
+          <div class="icon icon-bad">✕</div>
+          <p><b>Requiere internet para CDN.</b> Sin conexión no carga React, Chart.js ni XLSX.</p>
+        </div>
+      </div>
+      <div class="compare-card after">
+        <h3>✓ Con Docker Server</h3>
+        <div class="compare-item">
+          <div class="icon icon-good">✓</div>
+          <p><b>Datos unificados.</b> Un solo archivo JSON en el servidor. Todos los usuarios del NOC ven y editan la misma información en tiempo real.</p>
+        </div>
+        <div class="compare-item">
+          <div class="icon icon-good">✓</div>
+          <p><b>Acceso desde cualquier dispositivo.</b> Laptop, PC del NOC, tablet — con solo abrir el navegador y entrar a la URL.</p>
+        </div>
+        <div class="compare-item">
+          <div class="icon icon-good">✓</div>
+          <p><b>Actualización centralizada.</b> Un solo <code>git pull + docker compose up</code> actualiza el dashboard para todos.</p>
+        </div>
+        <div class="compare-item">
+          <div class="icon icon-good">✓</div>
+          <p><b>Datos persistentes en el servidor.</b> Volume Docker garantiza que los datos sobreviven reinicios y actualizaciones.</p>
+        </div>
+        <div class="compare-item">
+          <div class="icon icon-good">✓</div>
+          <p><b>SSL + dominio propio.</b> <code>https://sla.atisa.com</code> accesible de forma segura desde cualquier lugar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 SOLUCIÓN -->
+  <section id="solucion">
+    <div class="sec-label">02 — Propuesta</div>
+    <div class="sec-title">Servidor Docker Multi-Proyecto</div>
+    <div class="sec-desc">Un servidor único que aloja todos los proyectos de ATISA, cada uno en su propio contenedor, con Traefik como enrutador y SSL automático.</div>
+
+    <div class="alert alert-cyan">
+      <b>Principio de diseño:</b> Mínimos cambios al código existente. El HTML del dashboard se mantiene prácticamente igual — solo 2 funciones se adaptan para usar la API en lugar de localStorage. Todo lo demás (React, Chart.js, estilos, lógica de negocio) permanece intacto.
+    </div>
+
+    <table style="margin-top:20px">
+      <thead><tr><th>Componente</th><th>Tecnología</th><th>Función</th><th>Puerto</th></tr></thead>
+      <tbody>
+        <tr><td>Reverse Proxy</td><td><span class="badge b-cyan">Traefik v3</span></td><td>Enruta tráfico por subdominio, gestiona SSL Let's Encrypt</td><td class="td-mono">80 / 443</td></tr>
+        <tr><td>Gestión Docker</td><td><span class="badge b-purple">Portainer CE</span></td><td>Panel visual para administrar contenedores, logs, volumes</td><td class="td-mono">interno</td></tr>
+        <tr><td>SLA Dashboard</td><td><span class="badge b-emerald">Node 20 + Express</span></td><td>Sirve el HTML + API de datos (GET/POST JSON)</td><td class="td-mono">3001 interno</td></tr>
+        <tr><td>Persistencia</td><td><span class="badge b-amber">Docker Volume</span></td><td>Archivo <code>sla_bd.json</code> sobrevive reinicios y updates</td><td class="td-mono">—</td></tr>
+        <tr><td>Futuros proyectos</td><td><span class="badge b-blue">docker-compose</span></td><td>Cada proyecto nuevo agrega su propio compose con labels Traefik</td><td class="td-mono">interno</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 03 ARQUITECTURA -->
+  <section id="arquitectura">
+    <div class="sec-label">03 — Diseño</div>
+    <div class="sec-title">Arquitectura del Servidor</div>
+    <div class="sec-desc">Todos los proyectos comparten la misma infraestructura base (red, reverse proxy, SSL). Cada proyecto es independiente y se puede actualizar sin afectar los demás.</div>
+
+    <div class="arch-diagram">
+
+      <!-- Internet -->
+      <div class="arch-layer">
+        <div class="arch-layer-label">Internet / Usuarios NOC</div>
+        <div class="arch-group">
+          <div class="arch-box blue"><div class="ab-label">Cliente</div><div class="ab-name">Browser</div><div class="ab-sub">https://sla.atisa.com</div></div>
+          <div class="arch-box blue"><div class="ab-label">Cliente</div><div class="ab-name">Browser</div><div class="ab-sub">https://reporting.atisa.com</div></div>
+          <div class="arch-box blue"><div class="ab-label">Admin</div><div class="ab-name">Browser</div><div class="ab-sub">https://portainer.atisa.com</div></div>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:8px 0;color:var(--muted);font-size:.75rem">▼ HTTPS / SSL (Let's Encrypt automático)</div>
+
+      <!-- Traefik -->
+      <div class="arch-layer">
+        <div class="arch-layer-label">Capa de enrutamiento — servidor</div>
+        <div class="arch-group">
+          <div class="arch-box cyan" style="min-width:340px">
+            <div class="ab-label">Reverse Proxy + SSL</div>
+            <div class="ab-name">Traefik v3</div>
+            <div class="ab-sub">Puerto 80 → 443 · Certificados automáticos · Routing por subdominio</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:8px 0;color:var(--muted);font-size:.75rem">▼ Red interna Docker: atisa-network</div>
+
+      <!-- Proyectos -->
+      <div class="arch-layer">
+        <div class="arch-layer-label">Contenedores de proyectos</div>
+        <div class="arch-group">
+          <div class="arch-box emerald">
+            <div class="ab-label">Proyecto activo</div>
+            <div class="ab-name">SLA Dashboard</div>
+            <div class="ab-sub">Node + Express · Puerto 3001<br>sla.atisa.com</div>
+          </div>
+          <div class="arch-box purple">
+            <div class="ab-label">Proyecto futuro</div>
+            <div class="ab-name">Reporting KPIs</div>
+            <div class="ab-sub">React + Node + SQL Server<br>reporting.atisa.com</div>
+          </div>
+          <div class="arch-box amber">
+            <div class="ab-label">Gestión</div>
+            <div class="ab-name">Portainer</div>
+            <div class="ab-sub">Docker UI<br>portainer.atisa.com</div>
+          </div>
+          <div class="arch-box" style="border-style:dashed">
+            <div class="ab-label">Próximo proyecto</div>
+            <div class="ab-name">+ Nuevo</div>
+            <div class="ab-sub">Solo agregar<br>docker-compose.yml</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:8px 0;color:var(--muted);font-size:.75rem">▼ Persistencia</div>
+
+      <!-- Volumes -->
+      <div class="arch-layer">
+        <div class="arch-layer-label">Docker Volumes (datos persistentes)</div>
+        <div class="arch-group">
+          <div class="arch-box" style="border-color:rgba(245,158,11,.4)">
+            <div class="ab-label">Volume</div>
+            <div class="ab-name" style="color:var(--amber)">sla-monitor-data</div>
+            <div class="ab-sub">sla_bd.json</div>
+          </div>
+          <div class="arch-box" style="border-color:rgba(245,158,11,.4)">
+            <div class="ab-label">Volume</div>
+            <div class="ab-name" style="color:var(--amber)">portainer-data</div>
+            <div class="ab-sub">Config UI</div>
+          </div>
+          <div class="arch-box" style="border-color:rgba(245,158,11,.4)">
+            <div class="ab-label">Volume / Bind</div>
+            <div class="ab-name" style="color:var(--amber)">traefik/acme.json</div>
+            <div class="ab-sub">Certificados SSL</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Flujo de datos -->
+    <h3 style="font-size:.82rem;color:var(--white);margin-bottom:12px">Flujo de datos — guardar disponibilidad</h3>
+    <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:8px">
+      <div style="background:var(--s3);border:1px solid var(--border2);padding:8px 14px;font-size:.72rem;color:var(--text)">Usuario edita servicio</div>
+      <div style="color:var(--muted);padding:0 8px">→</div>
+      <div style="background:var(--s3);border:1px solid var(--border2);padding:8px 14px;font-size:.72rem;color:var(--text)">lsSave() en HTML</div>
+      <div style="color:var(--muted);padding:0 8px">→</div>
+      <div style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.3);padding:8px 14px;font-size:.72rem;color:var(--cyan)">POST /api/data</div>
+      <div style="color:var(--muted);padding:0 8px">→</div>
+      <div style="background:var(--s3);border:1px solid var(--border2);padding:8px 14px;font-size:.72rem;color:var(--text)">Express guarda JSON</div>
+      <div style="color:var(--muted);padding:0 8px">→</div>
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);padding:8px 14px;font-size:.72rem;color:var(--amber)">Docker Volume</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap">
+      <div style="background:var(--s3);border:1px solid var(--border2);padding:8px 14px;font-size:.72rem;color:var(--text)">Otro usuario abre dashboard</div>
+      <div style="color:var(--muted);padding:0 8px">→</div>
+      <div style="background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.3);padding:8px 14px;font-size:.72rem;color:var(--cyan)">GET /api/data</div>
+      <div style="color:var(--muted);padding:0 8px">→</div>
+      <div style="background:var(--s3);border:1px solid var(--border2);padding:8px 14px;font-size:.72rem;color:var(--text)">Express lee JSON</div>
+      <div style="color:var(--muted);padding:0 8px">→</div>
+      <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);padding:8px 14px;font-size:.72rem;color:var(--emerald)">Ve datos actualizados ✓</div>
+    </div>
+  </section>
+
+  <!-- 04 STACK -->
+  <section id="stack">
+    <div class="sec-label">04 — Tecnologías</div>
+    <div class="sec-title">Stack Tecnológico</div>
+    <div class="sec-desc">Tecnologías seleccionadas por simplicidad operativa — todas open source, sin licencias.</div>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-card-header">
+          <div class="stack-icon" style="background:rgba(6,182,212,.1);font-size:1.3rem">🔀</div>
+          <h3>Traefik v3</h3>
+        </div>
+        <p>Reverse proxy que detecta contenedores Docker automáticamente por labels. SSL Let's Encrypt sin configuración manual.</p>
+        <div class="version">traefik:v3.0</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-header">
+          <div class="stack-icon" style="background:rgba(139,92,246,.1);font-size:1.3rem">🐳</div>
+          <h3>Portainer CE</h3>
+        </div>
+        <p>Panel web para gestionar contenedores, ver logs, reiniciar servicios y monitorear recursos. Sin línea de comandos.</p>
+        <div class="version">portainer/portainer-ce:latest</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-header">
+          <div class="stack-icon" style="background:rgba(16,185,129,.1);font-size:1.3rem">⚡</div>
+          <h3>Node 20 + Express</h3>
+        </div>
+        <p>API mínima (~50 líneas) que sirve el HTML estático y expone endpoints GET/POST para la base de datos JSON.</p>
+        <div class="version">node:20-alpine</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-header">
+          <div class="stack-icon" style="background:rgba(245,158,11,.1);font-size:1.3rem">💾</div>
+          <h3>Docker Volume</h3>
+        </div>
+        <p>Persistencia simple: un archivo <code>sla_bd.json</code> en un volume administrado por Docker. Sin base de datos SQL.</p>
+        <div class="version">volume: sla-monitor-data</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-header">
+          <div class="stack-icon" style="background:rgba(59,130,246,.1);font-size:1.3rem">🌐</div>
+          <h3>React 18 + Chart.js</h3>
+        </div>
+        <p>El frontend existente se mantiene intacto. El HTML se sirve desde el contenedor en lugar de abrirse localmente.</p>
+        <div class="version">Sin cambios — reutilizado</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-header">
+          <div class="stack-icon" style="background:rgba(244,63,94,.1);font-size:1.3rem">🔒</div>
+          <h3>Let's Encrypt SSL</h3>
+        </div>
+        <p>Certificados HTTPS gratuitos y renovación automática. Traefik los gestiona sin intervención manual.</p>
+        <div class="version">Automático via Traefik</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 IMPLEMENTACIÓN -->
+  <section id="implementacion">
+    <div class="sec-label">05 — Pasos</div>
+    <div class="sec-title">Plan de Implementación</div>
+    <div class="sec-desc">Proceso en 4 fases. Tiempo estimado total: 2-4 horas en un servidor ya disponible.</div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h3>Preparar el servidor</h3>
+          <p>Instalar Docker y Docker Compose en el servidor (Linux recomendado). Apuntar el dominio al IP del servidor.</p>
+          <pre><span class="c"># Ubuntu/Debian</span>
+curl -fsSL https://get.docker.com | sh
+docker --version  <span class="c"># verificar</span>
+
+<span class="c"># Crear red compartida (una sola vez)</span>
+docker network create atisa-network</pre>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <span class="badge b-amber">Tiempo: ~20 min</span>
+            <span class="badge b-cyan">Requisito: acceso SSH al servidor</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h3>Levantar infraestructura base</h3>
+          <p>Clonar el repo <code>atisa-server-infra</code>, configurar el dominio y levantar Traefik + Portainer.</p>
+          <pre><span class="c"># En el servidor</span>
+git clone https://github.com/LDominguezIA/atisa-server-infra.git
+cd atisa-server-infra
+
+cp .env.example .env
+nano .env  <span class="c"># DOMAIN=atisa.tudominio.com</span>
+
+touch traefik/acme.json && chmod 600 traefik/acme.json
+
+docker compose up -d
+docker compose ps  <span class="c"># verificar que todo corra</span></pre>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <span class="badge b-amber">Tiempo: ~15 min</span>
+            <span class="badge b-cyan">Resultado: Traefik activo + SSL listo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h3>Desplegar el SLA Dashboard</h3>
+          <p>Clonar el repo del dashboard, configurar el dominio y construir el contenedor.</p>
+          <pre><span class="c"># En el servidor</span>
+git clone https://github.com/LDominguezIA/Dashboard-Infraestructura-Atisa.git
+cd Dashboard-Infraestructura-Atisa
+
+cp .env.example .env
+nano .env  <span class="c"># DOMAIN=atisa.tudominio.com</span>
+
+docker compose up -d --build
+
+<span class="c"># Verificar</span>
+docker compose ps
+docker compose logs -f sla-dashboard</pre>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <span class="badge b-amber">Tiempo: ~10 min</span>
+            <span class="badge b-emerald">Resultado: https://sla.atisa.com disponible</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h3>Migrar datos existentes</h3>
+          <p>Exportar la base de datos del navegador actual e importarla al servidor usando la función <b>↑BD</b> del dashboard.</p>
+          <pre><span class="c"># En el browser actual (antes de migrar)</span>
+<span class="c"># 1. Abrir SLA_Monitor_ATISA_standalone.html localmente</span>
+<span class="c"># 2. Click en botón ↓BD → descarga SLA_BD_2026-05-XX.json</span>
+
+<span class="c"># En el nuevo servidor</span>
+<span class="c"># 1. Abrir https://sla.atisa.com</span>
+<span class="c"># 2. Click en ↑BD → seleccionar el JSON descargado</span>
+<span class="c"># 3. Elegir "Reemplazar" → confirmar</span>
+<span class="c"># ✓ Todos los datos históricos migrados</span></pre>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <span class="badge b-amber">Tiempo: ~5 min</span>
+            <span class="badge b-emerald">Resultado: historial SLA completo en el servidor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 PROYECTOS -->
+  <section id="proyectos">
+    <div class="sec-label">06 — Escalabilidad</div>
+    <div class="sec-title">Agregar Proyectos Nuevos</div>
+    <div class="sec-desc">Cada proyecto solo necesita un <code>docker-compose.yml</code> con las etiquetas de Traefik. El reverse proxy lo detecta automáticamente.</div>
+
+    <div class="alert alert-emerald">
+      <b>Patrón para proyectos nuevos:</b> Cualquier proyecto con un <code>docker-compose.yml</code> que use la red <code>atisa-network</code> y tenga los labels de Traefik quedará disponible en su subdominio automáticamente — sin tocar la infraestructura.
+    </div>
+
+    <pre style="margin-top:16px"><span class="c"># Patrón docker-compose.yml para cualquier proyecto nuevo</span>
+services:
+  mi-proyecto:
+    image: <span class="n">mi-imagen</span>
+    networks:
+      - atisa-network
+    labels:
+      - <span class="s">"traefik.enable=true"</span>
+      - <span class="s">"traefik.http.routers.mi-proyecto.rule=Host(`<span class="n">subdominio</span>.${DOMAIN}`)"</span>
+      - <span class="s">"traefik.http.routers.mi-proyecto.tls=true"</span>
+      - <span class="s">"traefik.http.routers.mi-proyecto.tls.certresolver=letsencrypt"</span>
+
+networks:
+  atisa-network:
+    external: <span class="k">true</span>  <span class="c"># usa la red compartida</span></pre>
+
+    <table style="margin-top:20px">
+      <thead><tr><th>Proyecto</th><th>Estado</th><th>URL estimada</th><th>Stack</th><th>Notas</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>SLA Dashboard NOC</td>
+          <td><span class="badge b-emerald">Listo para deploy</span></td>
+          <td class="td-mono">sla.atisa.com</td>
+          <td>Node + HTML</td>
+          <td class="td-muted">Este repo — docker-compose ya generado</td>
+        </tr>
+        <tr>
+          <td>Reporting KPIs</td>
+          <td><span class="badge b-amber">Requiere docker-compose</span></td>
+          <td class="td-mono">reporting.atisa.com</td>
+          <td>React + Node + SQL Server</td>
+          <td class="td-muted">Proyecto ATISA existente — agregar compose</td>
+        </tr>
+        <tr>
+          <td>Naves Industriales IA</td>
+          <td><span class="badge b-blue">En desarrollo</span></td>
+          <td class="td-mono">naves.atisa.com</td>
+          <td>Gemini + Node</td>
+          <td class="td-muted">Proyecto en curso — dockerizar cuando esté listo</td>
+        </tr>
+        <tr>
+          <td>Portainer</td>
+          <td><span class="badge b-emerald">Incluido</span></td>
+          <td class="td-mono">portainer.atisa.com</td>
+          <td>Docker UI</td>
+          <td class="td-muted">Parte de la infra base</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 07 SERVIDOR -->
+  <section id="servidor">
+    <div class="sec-label">07 — Infraestructura física</div>
+    <div class="sec-title">Opciones de Servidor</div>
+    <div class="sec-desc">Tres caminos según el presupuesto y requisitos de disponibilidad de ATISA.</div>
+
+    <div class="cost-grid">
+      <div class="cost-card recommended">
+        <h3>VPS Cloud <span class="badge b-cyan">Recomendado</span></h3>
+        <div class="cost-price">~$6 USD<span>/mes</span></div>
+        <ul>
+          <li class="ok">Acceso desde internet</li>
+          <li class="ok">IP fija + dominio fácil</li>
+          <li class="ok">SSL Let's Encrypt funciona</li>
+          <li class="ok">Alta disponibilidad 99.9%</li>
+          <li class="ok">Backup snapshots incluidos</li>
+          <li>Contabo / DigitalOcean / Hetzner</li>
+          <li>2 vCPU · 4 GB RAM · 40 GB SSD</li>
+        </ul>
+      </div>
+      <div class="cost-card">
+        <h3>Servidor Local ATISA</h3>
+        <div class="cost-price">$0<span>/mes</span></div>
+        <ul>
+          <li class="ok">Sin costo mensual</li>
+          <li class="ok">Datos 100% internos</li>
+          <li class="ok">Sin dependencia de proveedor</li>
+          <li class="bad">Solo accesible en la red local</li>
+          <li class="bad">Requiere IP fija o VPN para remoto</li>
+          <li class="bad">SSL Let's Encrypt más complejo</li>
+          <li>PC/mini-PC con Ubuntu + Docker</li>
+        </ul>
+      </div>
+      <div class="cost-card">
+        <h3>Raspberry Pi / Mini PC</h3>
+        <div class="cost-price">$0<span>/mes</span></div>
+        <ul>
+          <li class="ok">Costo único de hardware</li>
+          <li class="ok">Consumo mínimo (~5W)</li>
+          <li class="ok">Silencioso y compacto</li>
+          <li class="bad">Solo red local</li>
+          <li class="bad">Sin redundancia</li>
+          <li>Raspberry Pi 4 (4GB) · $55 USD único</li>
+          <li>Ideal para entorno NOC local</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert alert-amber" style="margin-top:20px">
+      <b>Recomendación para ATISA:</b> Si el equipo NOC necesita acceso desde fuera de la red de la empresa (casa, clientes), usar un VPS. Si solo necesitan acceso interno, un mini PC o servidor local es suficiente y más económico. El código Docker funciona igual en ambos casos.
+    </div>
+  </section>
+
+  <!-- 08 ROADMAP -->
+  <section id="roadmap">
+    <div class="sec-label">08 — Plan de trabajo</div>
+    <div class="sec-title">Roadmap de Implementación</div>
+    <div class="sec-desc">Fases propuestas para la migración completa del ecosistema ATISA a Docker.</div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot active"></div>
+        <div class="tl-content">
+          <div class="tl-tag fase1">Fase 1 — Semana actual</div>
+          <h4>SLA Dashboard en Docker</h4>
+          <p>Archivos Docker generados ✓ · HTML modificado ✓ · Pendiente: levantar servidor y hacer primer deploy</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot next"></div>
+        <div class="tl-content">
+          <div class="tl-tag fase1">Fase 1 — Semana 3</div>
+          <h4>Infraestructura base en servidor</h4>
+          <p>Contratar/preparar servidor · Instalar Docker · Levantar Traefik + Portainer · Configurar dominio y SSL · Deploy del dashboard</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot next"></div>
+        <div class="tl-content">
+          <div class="tl-tag fase2">Fase 2 — Junio 2026</div>
+          <h4>Reporting KPIs en Docker</h4>
+          <p>Crear <code>docker-compose.yml</code> para el proyecto Reporting-Kpis (React + Node + SQL Server Express) · Deploy en el mismo servidor</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-tag fase2">Fase 2 — Junio 2026</div>
+          <h4>Backups automáticos</h4>
+          <p>Script de backup diario de Docker volumes a Google Drive o S3 · Retención de 30 días</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-tag fase3">Fase 3 — Julio 2026</div>
+          <h4>Naves Industriales IA + proyectos futuros</h4>
+          <p>Cada proyecto nuevo sigue el patrón establecido · El servidor ya tiene capacidad para 4-6 proyectos simultáneos</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-cyan" style="margin-top:32px">
+      <b>Siguiente acción inmediata:</b> Decidir si el servidor será un VPS cloud o un equipo local de ATISA. Con esa decisión se puede completar la Fase 1 en 2-3 horas de trabajo técnico.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>Propuesta generada por <span>L. Domínguez</span> — ldominguez@atisa.com</div>
+  <div>Claude Skills Engineering · <span>ATISA Group</span> · v2.0.0 · 15 Mayo 2026</div>
+</footer>
+
+<script>
+const links = document.querySelectorAll('nav a');
+const sections = document.querySelectorAll('section[id]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { threshold: 0.25 });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

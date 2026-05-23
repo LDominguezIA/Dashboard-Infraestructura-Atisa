@@ -1,0 +1,42 @@
+# ============================================================
+# SLA Monitor — Dashboard Infraestructura ATISA
+# Modo: PRODUCCIÓN (Traefik + SSL Let's Encrypt)
+# ============================================================
+# PREREQUISITO: red atisa-network debe existir
+#   docker network create atisa-network
+#   (o levanta primero atisa-server-infra/)
+#
+# INICIAR:  docker compose -f docker-compose.prod.yml up -d --build
+# LOGS:     docker compose -f docker-compose.prod.yml logs -f
+# DETENER:  docker compose -f docker-compose.prod.yml down
+# ============================================================
+
+services:
+  sla-dashboard:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: sla-dashboard
+    restart: unless-stopped
+    environment:
+      - PORT=3001
+      - DATA_DIR=/data
+      - NODE_ENV=production
+    volumes:
+      - sla-data:/data
+    networks:
+      - atisa-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sla.rule=Host(`sla.${DOMAIN}`)"
+      - "traefik.http.routers.sla.tls=true"
+      - "traefik.http.routers.sla.tls.certresolver=letsencrypt"
+      - "traefik.http.services.sla.loadbalancer.server.port=3001"
+
+volumes:
+  sla-data:
+    name: sla-monitor-data
+
+networks:
+  atisa-network:
+    external: true

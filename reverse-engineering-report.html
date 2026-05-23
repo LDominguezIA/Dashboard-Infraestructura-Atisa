@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reverse Engineering — Dashboard-Infraestructura-Atisa</title>
+<style>
+:root{
+  --bg:#020617;--surface:#0f172a;--surface2:#0a0f1e;--surface3:#131929;
+  --border:#1e293b;--border2:#2d3f5c;--text:#cbd5e1;--muted:#475569;
+  --emerald:#10b981;--rose:#f43f5e;--blue:#3b82f6;--amber:#f59e0b;
+  --purple:#8b5cf6;--cyan:#06b6d4;--white:#f8fafc;
+  --font-mono:'JetBrains Mono',Consolas,monospace;
+  --font-sans:'Inter','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-height:1.6;min-height:100vh}
+a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface2);border-right:1px solid var(--border);padding:24px 0}
+.sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.sidebar-logo .brand{font-size:.75rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--white)}
+.sidebar-logo .sub{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);margin-top:2px}
+.toc-item{display:flex;align-items:center;gap:8px;padding:7px 20px;font-family:var(--font-mono);font-size:.62rem;color:var(--muted);cursor:pointer;transition:all .15s;border-left:2px solid transparent}
+.toc-item:hover,.toc-item.active{color:var(--cyan);border-left-color:var(--cyan);background:rgba(6,182,212,.06)}
+.toc-num{opacity:.4;width:20px;flex-shrink:0}
+.main{overflow-y:auto;padding:40px 48px;max-width:1100px}
+
+.report-header{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+.report-header h1{font-size:1.8rem;font-weight:800;color:var(--white);letter-spacing:-.02em;margin-bottom:6px}
+.report-header .path{font-family:var(--font-mono);font-size:.68rem;color:var(--muted);margin-bottom:16px}
+.stats-row{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px}
+.stat-chip{background:var(--surface3);border:1px solid var(--border);padding:8px 16px;font-family:var(--font-mono);font-size:.66rem}
+.stat-chip .num{font-size:1.4rem;font-weight:800;color:var(--cyan);line-height:1}
+.stat-chip .lbl{color:var(--muted);font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+.section{margin-bottom:56px}
+.section-title{display:flex;align-items:center;gap:12px;font-size:1rem;font-weight:700;color:var(--white);letter-spacing:.04em;text-transform:uppercase;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.section-num{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);background:var(--surface3);border:1px solid var(--border);padding:3px 8px}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;font-family:var(--font-mono);font-size:.6rem;font-weight:600;border-radius:3px;border:1px solid}
+.badge-cyan{color:var(--cyan);border-color:rgba(6,182,212,.35);background:rgba(6,182,212,.08)}
+.badge-emerald{color:var(--emerald);border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.08)}
+.badge-rose{color:var(--rose);border-color:rgba(244,63,94,.35);background:rgba(244,63,94,.08)}
+.badge-amber{color:var(--amber);border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.08)}
+.badge-purple{color:var(--purple);border-color:rgba(139,92,246,.35);background:rgba(139,92,246,.08)}
+.badge-blue{color:var(--blue);border-color:rgba(59,130,246,.35);background:rgba(59,130,246,.08)}
+.badge-muted{color:var(--muted);border-color:var(--border);background:var(--surface3)}
+
+table.re-table{width:100%;border-collapse:collapse;font-size:.72rem}
+.re-table th{font-family:var(--font-mono);font-size:.56rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:8px 12px;text-align:left;border-bottom:2px solid var(--border2);white-space:nowrap}
+.re-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.re-table tr:hover td{background:rgba(255,255,255,.02)}
+.re-table code{font-family:var(--font-mono);font-size:.65rem;background:var(--surface3);padding:2px 6px;color:var(--cyan)}
+
+.card-grid{display:grid;gap:14px}
+.card-grid.cols-2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card-grid.cols-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);padding:18px 20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.card.accent-cyan::before{background:var(--cyan)}
+.card.accent-emerald::before{background:var(--emerald)}
+.card.accent-rose::before{background:var(--rose)}
+.card.accent-amber::before{background:var(--amber)}
+.card.accent-purple::before{background:var(--purple)}
+.card.accent-blue::before{background:var(--blue)}
+.card-label{font-family:var(--font-mono);font-size:.54rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.card-title{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:6px}
+.card-body{font-size:.75rem;color:var(--text);line-height:1.7}
+.card-meta{font-family:var(--font-mono);font-size:.6rem;color:var(--muted);margin-top:8px}
+
+pre.code-block{background:var(--surface2);border:1px solid var(--border);padding:16px 20px;font-family:var(--font-mono);font-size:.68rem;color:var(--text);overflow-x:auto;line-height:1.7;margin:0}
+pre.code-block .cm{color:var(--muted)}
+pre.code-block .kw{color:var(--purple)}
+pre.code-block .st{color:var(--emerald)}
+pre.code-block .nm{color:var(--cyan)}
+
+.diagram-wrap{background:var(--surface2);border:1px solid var(--border);padding:20px;overflow-x:auto;margin:0}
+.diagram-wrap pre{font-family:var(--font-mono);font-size:.66rem;color:var(--cyan);line-height:1.6;white-space:pre}
+
+.flow-step{display:flex;gap:12px;margin-bottom:8px;align-items:flex-start}
+.flow-step .step-num{font-family:var(--font-mono);font-size:.6rem;color:var(--cyan);background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);padding:2px 8px;flex-shrink:0;margin-top:2px}
+.flow-step .step-body{font-size:.75rem;color:var(--text);line-height:1.6}
+
+.adr-card{background:var(--surface);border:1px solid var(--border);padding:20px;margin-bottom:14px}
+.adr-card .adr-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.adr-card .adr-badge{font-family:var(--font-mono);font-size:.52rem;color:var(--purple);background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);padding:2px 8px}
+.adr-card .adr-title{font-weight:700;color:var(--white);font-size:.85rem}
+.adr-card .adr-section{font-family:var(--font-mono);font-size:.54rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:10px 0 4px}
+.adr-card .adr-body{font-size:.74rem;color:var(--text);line-height:1.65}
+
+.issue-card{display:flex;gap:12px;background:var(--surface);border:1px solid var(--border);padding:14px 16px;margin-bottom:10px}
+.issue-card.sev-high{border-left:3px solid var(--rose)}
+.issue-card.sev-medium{border-left:3px solid var(--amber)}
+.issue-card.sev-low{border-left:3px solid var(--blue)}
+.issue-sev{font-family:var(--font-mono);font-size:.54rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0;padding:2px 8px;align-self:flex-start;margin-top:2px}
+.sev-high .issue-sev{color:var(--rose);background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3)}
+.sev-medium .issue-sev{color:var(--amber);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3)}
+.sev-low .issue-sev{color:var(--blue);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3)}
+.issue-content .issue-title{font-weight:700;color:var(--white);font-size:.78rem;margin-bottom:4px}
+.issue-content .issue-body{font-size:.72rem;color:var(--text);line-height:1.6}
+.issue-content .issue-rec{font-size:.68rem;color:var(--emerald);margin-top:5px}
+
+.entity-block{background:var(--surface);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.entity-header{background:var(--surface3);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.entity-name{font-family:var(--font-mono);font-weight:700;color:var(--cyan);font-size:.8rem}
+.entity-desc{font-size:.68rem;color:var(--muted)}
+
+.stack-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.stack-row:last-child{border-bottom:none}
+.stack-layer{font-family:var(--font-mono);font-size:.56rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;width:110px;flex-shrink:0}
+.stack-items{display:flex;flex-wrap:wrap;gap:6px}
+
+.report-footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:.6rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media print{.sidebar{display:none}.main{padding:20px}.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">ATISA Group</div>
+    <div class="sub">Reverse Engineering Report</div>
+  </div>
+  <div class="toc-item active" onclick="goTo('s01',this)"><span class="toc-num">01</span>Stack tecnológico</div>
+  <div class="toc-item" onclick="goTo('s02',this)"><span class="toc-num">02</span>Arquitectura</div>
+  <div class="toc-item" onclick="goTo('s03',this)"><span class="toc-num">03</span>Módulos principales</div>
+  <div class="toc-item" onclick="goTo('s04',this)"><span class="toc-num">04</span>API Endpoints</div>
+  <div class="toc-item" onclick="goTo('s05',this)"><span class="toc-num">05</span>Flujos de negocio</div>
+  <div class="toc-item" onclick="goTo('s06',this)"><span class="toc-num">06</span>Modelo de datos</div>
+  <div class="toc-item" onclick="goTo('s07',this)"><span class="toc-num">07</span>Integraciones externas</div>
+  <div class="toc-item" onclick="goTo('s08',this)"><span class="toc-num">08</span>Decisiones arquitectónicas</div>
+  <div class="toc-item" onclick="goTo('s09',this)"><span class="toc-num">09</span>Observaciones y hallazgos</div>
+</nav>
+
+<main class="main">
+
+  <div class="report-header">
+    <h1>Dashboard-Infraestructura-Atisa</h1>
+    <div class="path">c:\Users\ldominguez\Documents\GitHub\Dashboard-Infraestructura-Atisa</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <span class="badge badge-cyan">SLA Monitor</span>
+      <span class="badge badge-emerald">NOC Dashboard</span>
+      <span class="badge badge-purple">React 18 Standalone</span>
+      <span class="badge badge-amber">Express API</span>
+      <span class="badge badge-muted">Docker Ready</span>
+    </div>
+    <div class="stats-row">
+      <div class="stat-chip"><div class="num">1</div><div class="lbl">Archivo HTML principal</div></div>
+      <div class="stat-chip"><div class="num">715</div><div class="lbl">Líneas de código</div></div>
+      <div class="stat-chip"><div class="num">13</div><div class="lbl">Componentes React</div></div>
+      <div class="stat-chip"><div class="num">5</div><div class="lbl">Endpoints API</div></div>
+      <div class="stat-chip"><div class="num">58</div><div class="lbl">Servicios monitoreados</div></div>
+      <div class="stat-chip"><div class="num">4</div><div class="lbl">Vistas principales</div></div>
+    </div>
+    <div style="margin-top:16px;font-size:.72rem;color:var(--muted)">
+      Análisis: <strong style="color:var(--text)">18 mayo 2026</strong> &nbsp;·&nbsp;
+      Autor: <strong style="color:var(--cyan)">L. Domínguez — ldominguez@atisa.com</strong>
+    </div>
+  </div>
+
+  <!-- 01 STACK -->
+  <section class="section" id="s01">
+    <div class="section-title"><span class="section-num">01</span>Stack Tecnológico</div>
+    <div style="background:var(--surface);border:1px solid var(--border)">
+      <div class="stack-row"><div class="stack-layer">Runtime</div><div class="stack-items"><span class="badge badge-emerald">Node.js 20 Alpine</span><span class="badge badge-cyan">Browser (Chrome/Edge)</span></div></div>
+      <div class="stack-row"><div class="stack-layer">Frontend</div><div class="stack-items"><span class="badge badge-cyan">React 18.2.0 (CDN UMD)</span><span class="badge badge-amber">Babel 7.23.5 Standalone</span><span class="badge badge-muted">HTML5 Standalone SPA</span></div></div>
+      <div class="stack-row"><div class="stack-layer">Backend API</div><div class="stack-items"><span class="badge badge-emerald">Express 4.18.2</span><span class="badge badge-muted">fs (flat-file JSON)</span></div></div>
+      <div class="stack-row"><div class="stack-layer">Librerías UI</div><div class="stack-items"><span class="badge badge-rose">Chart.js 4.4.1 (lazy CDN)</span><span class="badge badge-purple">XLSX.js 0.18.5 (lazy CDN)</span><span class="badge badge-muted">Syne + JetBrains Mono</span></div></div>
+      <div class="stack-row"><div class="stack-layer">Persistencia</div><div class="stack-items"><span class="badge badge-amber">localStorage (sla_atisa_v5)</span><span class="badge badge-cyan">/data/sla_bd.json</span></div></div>
+      <div class="stack-row"><div class="stack-layer">Contenedor</div><div class="stack-items"><span class="badge badge-blue">Docker node:20-alpine</span><span class="badge badge-muted">docker-compose local</span><span class="badge badge-muted">docker-compose.prod Traefik</span></div></div>
+      <div class="stack-row"><div class="stack-layer">Reverse Proxy</div><div class="stack-items"><span class="badge badge-purple">Traefik 2.x (prod)</span><span class="badge badge-emerald">Let's Encrypt TLS</span></div></div>
+      <div class="stack-row"><div class="stack-layer">Entorno</div><div class="stack-items"><span class="badge badge-muted">PORT=3001</span><span class="badge badge-muted">DATA_DIR=/data</span><span class="badge badge-muted">DOMAIN=atisa.tudominio.com</span></div></div>
+    </div>
+  </section>
+
+  <!-- 02 ARQUITECTURA -->
+  <section class="section" id="s02">
+    <div class="section-title"><span class="section-num">02</span>Arquitectura</div>
+    <div class="card accent-cyan" style="margin-bottom:16px">
+      <div class="card-label">Patrón detectado</div>
+      <div class="card-title">Standalone SPA + REST API opcional (Dual-mode)</div>
+      <div class="card-body">Un único archivo HTML con React 18 transpilado por Babel en el navegador. Opera en dos modos:
+        <strong style="color:var(--cyan)">file://</strong> (solo localStorage, sin servidor) y
+        <strong style="color:var(--emerald)">http://</strong> (API REST + localStorage como fallback).
+        Detección automática: <code>window.location.protocol !== 'file:'</code></div>
+    </div>
+    <div class="diagram-wrap" style="margin-bottom:16px">
+<pre>
+  ┌──────────────────────────────────────────────────────────────────┐
+  │                        MODO FILE://                               │
+  │  Browser ──► SLA_Monitor_ATISA_standalone.html                    │
+  │                    │                                              │
+  │              React 18 + Babel CDN                                 │
+  │                    │                                              │
+  │              localStorage (sla_atisa_v5)                          │
+  └──────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────┐
+  │                       MODO HTTP://                                │
+  │                                                                   │
+  │  Browser ──► GET / ──► Express Static ──► public/index.html       │
+  │               │                                                   │
+  │               ├─► GET  /api/data  ──► fs.readFile(sla_bd.json)    │
+  │               ├─► POST /api/data  ──► fs.writeFile(sla_bd.json)   │
+  │               ├─► GET  /api/export ──► sendFile(sla_bd.json)      │
+  │               └─► GET  /health    ──► { status: 'ok' }            │
+  │                                                                   │
+  │  Multi-window sync: polling 15s → detecta savedAt change          │
+  └──────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────┐
+  │                     MODO DOCKER (PROD)                            │
+  │                                                                   │
+  │  Internet ──► Traefik (sla.domain.com) ──► sla-dashboard:3001     │
+  │                    │                                              │
+  │              Express + static HTML                                 │
+  │                    │                                              │
+  │         Docker Volume: sla-monitor-data (/data/sla_bd.json)       │
+  └──────────────────────────────────────────────────────────────────┘</pre>
+    </div>
+    <div class="card-grid cols-2">
+      <div class="card accent-purple">
+        <div class="card-label">Inicialización de datos</div>
+        <div class="card-title">PRELOAD + seed automático Docker</div>
+        <div class="card-body">58 servicios hardcoded como constante PRELOAD (Abril 2026). En Docker, <code>start.sh</code> copia el JSON seed al volumen si no existe <code>sla_bd.json</code>.</div>
+      </div>
+      <div class="card accent-amber">
+        <div class="card-label">Sincronización multi-ventana</div>
+        <div class="card-title">Polling cada 15 segundos</div>
+        <div class="card-body">En modo servidor: <code>setInterval(15000)</code> detecta cambios en <code>savedAt</code>. Si cambia, merge en estado React + toast "🔄 Sincronizado".</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 MÓDULOS -->
+  <section class="section" id="s03">
+    <div class="section-title"><span class="section-num">03</span>Módulos Principales</div>
+    <div class="card-grid cols-2">
+      <div class="card accent-cyan">
+        <div class="card-label">Componente raíz · ~190 LOC</div>
+        <div class="card-title">App</div>
+        <div class="card-body">Todo el estado global: allData, selYear/Month, tab, page, modales, filtros, ordenamiento. Persistencia dual. Routing por estado <code>page</code> (sin react-router).</div>
+        <div class="card-meta">15 useState · 2 useEffect · 1 useCallback</div>
+      </div>
+      <div class="card accent-purple">
+        <div class="card-label">Vista principal · ~55 LOC</div>
+        <div class="card-title">MonitorTable</div>
+        <div class="card-body">Tabla de servicios con 13 columnas. Expand inline por semana, delta Δ vs mes anterior, sorting multi-columna, edición y eliminación en línea.</div>
+        <div class="card-meta">Props: filt, tab, wd, allData, selYear, selMonth, onEdit, onDelete, onSort</div>
+      </div>
+      <div class="card accent-rose">
+        <div class="card-label">Visualización · ~55 LOC</div>
+        <div class="card-title">ChartsSection</div>
+        <div class="card-body">8 gráficas Chart.js lazy-loaded: Disponibilidad vs SLA (bar), Cumplimiento (doughnut), Tickets (bar), T.Resolución (bar), Disponibilidad por cat (bar), Downtime (line), Tendencia semanal Top 6 (multi-line), Tickets+DT por cat (dual-axis).</div>
+        <div class="card-meta">Usa ChartCanvas wrapper con destroy/recreate lifecycle</div>
+      </div>
+      <div class="card accent-emerald">
+        <div class="card-label">Vista · ~40 LOC</div>
+        <div class="card-title">SemaforoPage</div>
+        <div class="card-body">Grid de tarjetas animadas por CSS keyframes. Verde (CUMPLIDO), amarillo pulsante (EN RIESGO), rojo animado (INCUMPLIDO). Filtros por categoría y estado. Ordenamiento: críticos primero.</div>
+      </div>
+      <div class="card accent-amber">
+        <div class="card-label">Vista · ~35 LOC</div>
+        <div class="card-title">EjecutivoPage</div>
+        <div class="card-body">6 KPI cards, tabla de críticos/riesgo, tabla resumen completa. <code>doPrint()</code> genera HTML limpio en popup con <code>window.print()</code> para PDF.</div>
+        <div class="card-meta">PDF via window.print() — sin Puppeteer</div>
+      </div>
+      <div class="card accent-blue">
+        <div class="card-label">Vista · ~80 LOC</div>
+        <div class="card-title">ComparativosPage</div>
+        <div class="card-body">5 sub-vistas: <strong>Overview</strong> (4 gráficas multi-mes), <strong>Tendencias</strong> (multi-línea), <strong>Tabla Δ</strong> (delta entre meses), <strong>Heatmap</strong> (grid por disponibilidad), <strong>Ranking</strong> (top 10 mejor/peor/tickets/DT).</div>
+      </div>
+      <div class="card accent-cyan">
+        <div class="card-label">Utilidad · ~20 LOC</div>
+        <div class="card-title">ChartCanvas</div>
+        <div class="card-body">Wrapper genérico para Chart.js. Maneja <code>destroy()</code> antes de recrear para evitar memory leaks. Acepta <code>builder(Chart, canvas)</code> para máxima flexibilidad.</div>
+        <div class="card-meta">useRef(canvas) + useRef(chartInstance)</div>
+      </div>
+      <div class="card accent-purple">
+        <div class="card-label">Modales CRUD · ~60 LOC total</div>
+        <div class="card-title">SvcModal + ManageModal + ImportModal</div>
+        <div class="card-body"><strong>SvcModal</strong>: form crear/editar con grid 5 semanas.<br/>
+        <strong>ManageModal</strong>: gestión de categorías y descripciones.<br/>
+        <strong>ImportModal</strong>: drag &amp; drop XLSX/CSV con detección fuzzy de columnas.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 ENDPOINTS -->
+  <section class="section" id="s04">
+    <div class="section-title"><span class="section-num">04</span>API Endpoints</div>
+    <table class="re-table">
+      <thead><tr><th>Método</th><th>Ruta</th><th>Descripción</th><th>Body / Response</th><th>Auth</th><th>Archivo</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-emerald">GET</span></td>
+          <td><code>/api/data</code></td>
+          <td>Carga BD completa desde JSON</td>
+          <td>→ payload completo o null</td>
+          <td><span class="badge badge-rose">Sin auth</span></td>
+          <td>server.js:16</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-amber">POST</span></td>
+          <td><code>/api/data</code></td>
+          <td>Guarda BD completa. Agrega savedAt y v:"5"</td>
+          <td>← <code>{ allData, weekDates, cats, descs }</code></td>
+          <td><span class="badge badge-rose">Sin auth</span></td>
+          <td>server.js:28</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-emerald">GET</span></td>
+          <td><code>/api/export</code></td>
+          <td>Descarga backup JSON (Content-Disposition force download)</td>
+          <td>→ SLA_BD_YYYY-MM-DD.json</td>
+          <td><span class="badge badge-rose">Sin auth</span></td>
+          <td>server.js:43</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-emerald">GET</span></td>
+          <td><code>/health</code></td>
+          <td>Docker HEALTHCHECK</td>
+          <td>→ <code>{ status:"ok", ts }</code></td>
+          <td><span class="badge badge-emerald">Público</span></td>
+          <td>server.js:57</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-cyan">GET *</span></td>
+          <td><code>/*</code></td>
+          <td>SPA fallback — sirve public/index.html</td>
+          <td>→ HTML</td>
+          <td><span class="badge badge-emerald">Público</span></td>
+          <td>server.js:60</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 05 FLUJOS -->
+  <section class="section" id="s05">
+    <div class="section-title"><span class="section-num">05</span>Flujos de Negocio</div>
+
+    <div class="card accent-cyan" style="margin-bottom:16px">
+      <div class="card-label">Flujo 1 — Carga inicial</div>
+      <div class="card-title">Inicialización dual-mode</div>
+      <div style="margin-top:12px">
+        <div class="flow-step"><span class="step-num">01</span><div class="step-body">App monta → detecta <code>IS_SERVER = window.location.protocol !== 'file:'</code></div></div>
+        <div class="flow-step"><span class="step-num">02a</span><div class="step-body"><strong>Servidor:</strong> <code>GET /api/data</code> → si ok, llama <code>applyData()</code></div></div>
+        <div class="flow-step"><span class="step-num">02b</span><div class="step-body"><strong>Fallback/archivo:</strong> <code>localStorage.getItem('sla_atisa_v5')</code></div></div>
+        <div class="flow-step"><span class="step-num">03</span><div class="step-body"><code>applyData()</code>: merge sobre PRELOAD base (preserva Abril 2026 como default)</div></div>
+        <div class="flow-step"><span class="step-num">04</span><div class="step-body">Actualiza estado React → render inicial</div></div>
+      </div>
+    </div>
+
+    <div class="card accent-emerald" style="margin-bottom:16px">
+      <div class="card-label">Flujo 2 — Guardar cambios (CRUD)</div>
+      <div class="card-title">Persistencia dual optimistic</div>
+      <div style="margin-top:12px">
+        <div class="flow-step"><span class="step-num">01</span><div class="step-body">Usuario agrega/edita/elimina servicio o actualiza semanas</div></div>
+        <div class="flow-step"><span class="step-num">02</span><div class="step-body"><code>setAllData(nd)</code> → React re-renderiza inmediatamente (optimistic UI)</div></div>
+        <div class="flow-step"><span class="step-num">03</span><div class="step-body"><code>lsSave()</code>: si IS_SERVER → <code>POST /api/data</code> (async, fire-and-forget)</div></div>
+        <div class="flow-step"><span class="step-num">04</span><div class="step-body">Siempre: <code>localStorage.setItem('sla_atisa_v5', JSON.stringify(payload))</code></div></div>
+        <div class="flow-step"><span class="step-num">05</span><div class="step-body">Toast confirma operación</div></div>
+      </div>
+    </div>
+
+    <div class="card accent-amber" style="margin-bottom:16px">
+      <div class="card-label">Flujo 3 — Lógica de negocio SLA</div>
+      <div class="card-title">Cálculo de estado y color (reglas críticas)</div>
+      <div style="margin-top:12px">
+        <pre class="code-block"><span class="cm">// Estado SLA (delta = disponibilidad - objetivo)</span>
+<span class="kw">if</span> delta &gt;= 0       → <span class="st">"CUMPLIDO"</span>   (verde)
+<span class="kw">if</span> delta &gt;= -0.5    → <span class="st">"EN RIESGO"</span>  (amarillo pulsante)
+<span class="kw">if</span> delta &lt;  -0.5    → <span class="st">"INCUMPLIDO"</span> (rojo animado)
+
+<span class="cm">// Color interpolado continuo verde→amarillo→rojo</span>
+delta &gt;= 0           → #00e676 (verde puro)
+-0.3 &lt;= delta &lt; 0   → iC(verde, amarillo, t)
+-1.5 &lt;= delta &lt; -0.3 → iC(amarillo, rojo, t)
+delta &lt; -1.5         → #ff1744 (rojo puro)</pre>
+      </div>
+    </div>
+
+    <div class="card accent-rose" style="margin-bottom:16px">
+      <div class="card-label">Flujo 4 — Multi-window sync</div>
+      <div class="card-title">Polling 15s para equipos NOC simultáneos</div>
+      <div style="margin-top:12px">
+        <div class="flow-step"><span class="step-num">01</span><div class="step-body">Solo activo en modo servidor: <code>setInterval(() =&gt; fetch('/api/data'), 15000)</code></div></div>
+        <div class="flow-step"><span class="step-num">02</span><div class="step-body">Compara <code>d.savedAt</code> con <code>lastSaved</code> en memoria — si igual, no hace nada</div></div>
+        <div class="flow-step"><span class="step-num">03</span><div class="step-body">Si cambió: merge del nuevo <code>allData</code> + toast "🔄 Sincronizado"</div></div>
+        <div class="flow-step"><span class="step-num">04</span><div class="step-body">Cleanup: <code>clearInterval</code> al desmontar el componente</div></div>
+      </div>
+    </div>
+
+    <div class="card accent-purple">
+      <div class="card-label">Flujo 5 — Importar Excel</div>
+      <div class="card-title">Fuzzy column detection con XLSX.js</div>
+      <div style="margin-top:12px">
+        <div class="flow-step"><span class="step-num">01</span><div class="step-body">Drag &amp; drop o picker → <code>loadXLSX()</code> inyecta la librería lazy si no está cargada</div></div>
+        <div class="flow-step"><span class="step-num">02</span><div class="step-body"><code>X.read()</code> + <code>sheet_to_json()</code> → array de objetos (headers = keys)</div></div>
+        <div class="flow-step"><span class="step-num">03</span><div class="step-body">Detección fuzzy: busca columnas que incluyan "nombre", "cat", "disp", "tkt", etc.</div></div>
+        <div class="flow-step"><span class="step-num">04</span><div class="step-body"><strong>Fusionar</strong>: preserva servicios no en el Excel. <strong>Reemplazar</strong>: sobreescribe mes completo.</div></div>
+        <div class="flow-step"><span class="step-num">05</span><div class="step-body">Guarda con <code>lsSave()</code> → toast con conteo importado</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 MODELO DE DATOS -->
+  <section class="section" id="s06">
+    <div class="section-title"><span class="section-num">06</span>Modelo de Datos</div>
+
+    <div style="margin-bottom:20px">
+      <div class="diagram-wrap">
+<pre>
+  BD raíz (localStorage key: sla_atisa_v5 / archivo sla_bd.json)
+  ├── allData: Record&lt;"YYYY-M", Service[]&gt;
+  │   └── "2026-3": [ ...58 servicios de Marzo 2026 ]
+  │   └── "2026-4": [ ...58 servicios de Abril 2026 ]
+  ├── weekDates: Record&lt;"YYYY-M", WeekDate[5]&gt;
+  │   └── { label, from:"YYYY-MM-DD", to:"YYYY-MM-DD" }
+  ├── cats: string[]      ["Checador","NVR","Red","Servidores"]
+  ├── descs: string[]     ["CCTV","Reloj Checador","Servidores","..."]
+  ├── savedAt: ISO string
+  └── v: "5"              (versión schema)</pre>
+      </div>
+    </div>
+
+    <div class="entity-block">
+      <div class="entity-header">
+        <span class="entity-name">Service</span>
+        <span class="entity-desc">Entidad principal — un servicio monitoreable</span>
+      </div>
+      <table class="re-table">
+        <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th><th>Ejemplo / Notas</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>string</td><td>ID único. En PRELOAD: 5 chars cortos. En nuevos: Date.now()+random</td><td><code>"pipsu"</code> / <code>"mp47ho3456v"</code></td></tr>
+          <tr><td><code>name</code></td><td>string</td><td>Nombre del servicio</td><td><code>"Pip Sur"</code></td></tr>
+          <tr><td><code>desc</code></td><td>string</td><td>Tipo de servicio (lista controlada)</td><td><code>"Servicio de Internet"</code></td></tr>
+          <tr><td><code>cat</code></td><td>string</td><td>Categoría (lista controlada)</td><td><code>"Red"</code> | <code>"Checador"</code> | <code>"NVR"</code> | <code>"Servidores"</code></td></tr>
+          <tr><td><code>sla</code></td><td>number</td><td>Objetivo SLA en %</td><td>99.8 (Red/Checador/NVR) · 99.9 (Servidores)</td></tr>
+          <tr><td><code>remediation</code></td><td>string</td><td>Acciones correctivas NOC</td><td><code>""</code></td></tr>
+          <tr><td><code>comments</code></td><td>string</td><td>Notas libres</td><td><code>""</code></td></tr>
+          <tr><td><code>weeks</code></td><td>WeekData[5]</td><td>5 semanas fijas por mes</td><td>ver tabla WeekData</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="entity-block" style="margin-top:12px">
+      <div class="entity-header">
+        <span class="entity-name">WeekData</span>
+        <span class="entity-desc">Métricas semanales — 5 por mes</span>
+      </div>
+      <table class="re-table">
+        <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th><th>Nota</th></tr></thead>
+        <tbody>
+          <tr><td><code>avail</code></td><td>number | null</td><td>Disponibilidad % de la semana</td><td><code>null</code> = semana futura sin datos</td></tr>
+          <tr><td><code>tickets</code></td><td>number</td><td>Incidentes generados</td><td>0 = sin incidentes</td></tr>
+          <tr><td><code>time</code></td><td>number (min)</td><td>Tiempo promedio resolución</td><td>Diferente de dt — es el tiempo de atención</td></tr>
+          <tr><td><code>dt</code></td><td>number (min)</td><td>Downtime total del período</td><td>Impacto total acumulado</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="card accent-emerald">
+        <div class="card-label">Distribución actual — 58 servicios (Abril 2026)</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px">
+          <div style="background:var(--surface3);border:1px solid var(--border);padding:12px;text-align:center">
+            <div style="font-size:1.6rem;font-weight:800;color:var(--cyan)">36</div>
+            <div style="font-family:var(--font-mono);font-size:.58rem;color:var(--muted);text-transform:uppercase">Checadores</div>
+          </div>
+          <div style="background:var(--surface3);border:1px solid var(--border);padding:12px;text-align:center">
+            <div style="font-size:1.6rem;font-weight:800;color:var(--emerald)">11</div>
+            <div style="font-family:var(--font-mono);font-size:.58rem;color:var(--muted);text-transform:uppercase">Red</div>
+          </div>
+          <div style="background:var(--surface3);border:1px solid var(--border);padding:12px;text-align:center">
+            <div style="font-size:1.6rem;font-weight:800;color:var(--purple)">8</div>
+            <div style="font-family:var(--font-mono);font-size:.58rem;color:var(--muted);text-transform:uppercase">NVR (CCTV)</div>
+          </div>
+          <div style="background:var(--surface3);border:1px solid var(--border);padding:12px;text-align:center">
+            <div style="font-size:1.6rem;font-weight:800;color:var(--rose)">5</div>
+            <div style="font-family:var(--font-mono);font-size:.58rem;color:var(--muted);text-transform:uppercase">Servidores</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 INTEGRACIONES -->
+  <section class="section" id="s07">
+    <div class="section-title"><span class="section-num">07</span>Integraciones Externas</div>
+    <table class="re-table">
+      <thead><tr><th>Servicio</th><th>Tipo</th><th>Propósito</th><th>Carga</th><th>Criticidad</th></tr></thead>
+      <tbody>
+        <tr><td><strong>cdnjs / React 18.2.0</strong></td><td><span class="badge badge-cyan">CDN Eager</span></td><td>Runtime UI — ReactDOM, hooks</td><td>Al cargar HTML</td><td><span class="badge badge-rose">Crítica</span></td></tr>
+        <tr><td><strong>cdnjs / Babel 7.23.5</strong></td><td><span class="badge badge-cyan">CDN Eager</span></td><td>Transpila JSX en navegador</td><td>Al cargar HTML</td><td><span class="badge badge-rose">Crítica</span></td></tr>
+        <tr><td><strong>cdnjs / Chart.js 4.4.1</strong></td><td><span class="badge badge-amber">CDN Lazy</span></td><td>8+ gráficas (bar, line, doughnut, dual-axis)</td><td>Al abrir gráficas</td><td><span class="badge badge-amber">Alta</span></td></tr>
+        <tr><td><strong>cdnjs / XLSX.js 0.18.5</strong></td><td><span class="badge badge-amber">CDN Lazy</span></td><td>Parse .xlsx/.csv para importar datos</td><td>Al abrir ImportModal</td><td><span class="badge badge-blue">Media</span></td></tr>
+        <tr><td><strong>Google Fonts / Syne + JetBrains Mono</strong></td><td><span class="badge badge-muted">CDN CSS</span></td><td>Tipografías UI</td><td>CSS @import</td><td><span class="badge badge-blue">Media</span></td></tr>
+        <tr><td><strong>Docker Hub / node:20-alpine</strong></td><td><span class="badge badge-muted">Base Image</span></td><td>Imagen base del contenedor</td><td>Build time</td><td><span class="badge badge-muted">Baja</span></td></tr>
+        <tr><td><strong>Let's Encrypt (vía Traefik)</strong></td><td><span class="badge badge-purple">TLS Auto</span></td><td>Certificados SSL prod en sla.DOMAIN</td><td>Prod only</td><td><span class="badge badge-amber">Alta (prod)</span></td></tr>
+      </tbody>
+    </table>
+    <div class="card accent-rose" style="margin-top:14px">
+      <div class="card-label">Riesgo de disponibilidad</div>
+      <div class="card-title">CDN externos sin SRI — dependencia de conectividad</div>
+      <div class="card-body">React y Babel se cargan desde cdnjs sin Subresource Integrity. Si cdnjs tiene outage al momento de carga, la app no funciona. Para operación offline/industrial considerar copiar librerías localmente en Docker.</div>
+    </div>
+  </section>
+
+  <!-- 08 ADRs -->
+  <section class="section" id="s08">
+    <div class="section-title"><span class="section-num">08</span>Decisiones Arquitectónicas</div>
+
+    <div class="adr-card">
+      <div class="adr-header"><span class="adr-badge">ADR-001</span><div class="adr-title">Standalone HTML — cero build step</div></div>
+      <div class="adr-section">Contexto</div><div class="adr-body">El equipo NOC necesita abrir el dashboard sin instalar nada. No hay DevOps ni CI/CD.</div>
+      <div class="adr-section">Decisión</div><div class="adr-body">Un único .html con Babel transpilando JSX en tiempo de carga. Sin npm, sin bundler.</div>
+      <div class="adr-section">Evidencia</div><div class="adr-body"><code>&lt;script type="text/babel" data-presets="react"&gt;</code></div>
+      <div class="adr-section">Consecuencias</div><div class="adr-body">✅ Despliegue trivial. ❌ ~2-3s overhead transpilación. ❌ Sin tree-shaking. ❌ Difícil modularizar.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-header"><span class="adr-badge">ADR-002</span><div class="adr-title">Persistencia dual: API REST + localStorage fallback</div></div>
+      <div class="adr-section">Contexto</div><div class="adr-body">Cada PC tiene su BD local. Para compartir datos se necesita servidor, pero la app debe funcionar sin él.</div>
+      <div class="adr-section">Decisión</div><div class="adr-body">Detección automática por <code>window.location.protocol</code>. File:// → solo localStorage. Http:// → API primero.</div>
+      <div class="adr-section">Evidencia</div><div class="adr-body"><code>const IS_SERVER = window.location.protocol !== 'file:'</code> — App, línea ~549</div>
+      <div class="adr-section">Consecuencias</div><div class="adr-body">✅ Zero breaking change al migrar. ✅ Resiliente a caídas. ❌ localStorage puede divergir del servidor.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-header"><span class="adr-badge">ADR-003</span><div class="adr-title">JSON flat file como base de datos</div></div>
+      <div class="adr-section">Contexto</div><div class="adr-body">~60 servicios con 5 semanas/mes. El equipo no administra bases de datos.</div>
+      <div class="adr-section">Decisión</div><div class="adr-body">Un único <code>sla_bd.json</code> leído/escrito con <code>fs.readFileSync/writeFileSync</code>. Sin ORM ni SQL.</div>
+      <div class="adr-section">Consecuencias</div><div class="adr-body">✅ Sin dependencias BD. ✅ Backup trivial. ✅ Docker volume da persistencia. ❌ Sin transacciones. ❌ Last-write-wins.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-header"><span class="adr-badge">ADR-004</span><div class="adr-title">Lazy loading de Chart.js y XLSX</div></div>
+      <div class="adr-section">Contexto</div><div class="adr-body">Chart.js (~250KB) y XLSX (~1MB) son pesados. La mayoría de sesiones no los necesitan.</div>
+      <div class="adr-section">Decisión</div><div class="adr-body">Se inyectan dinámicamente la primera vez que se necesitan. Se cachean en variables <code>_chartJs/_xlsx</code>.</div>
+      <div class="adr-section">Consecuencias</div><div class="adr-body">✅ Carga inicial ligera. ❌ Delay en primera apertura de gráficas. ❌ Error si CDN no responde.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-header"><span class="adr-badge">ADR-005</span><div class="adr-title">Polling 15s para multi-window sync</div></div>
+      <div class="adr-section">Contexto</div><div class="adr-body">Múltiples técnicos NOC pueden editar simultáneamente. Se necesita sincronización simple.</div>
+      <div class="adr-section">Decisión</div><div class="adr-body">Poll a <code>/api/data</code> cada 15s comparando <code>savedAt</code>. Sin WebSockets ni SSE.</div>
+      <div class="adr-section">Consecuencias</div><div class="adr-body">✅ Sin dependencias adicionales. ❌ Latencia hasta 15s. ❌ Last-write-wins si 2 usuarios guardan en &lt;15s.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-header"><span class="adr-badge">ADR-006</span><div class="adr-title">PRELOAD hardcoded de 58 servicios</div></div>
+      <div class="adr-section">Contexto</div><div class="adr-body">En instalación nueva no hay datos. Se quiere funcionar inmediatamente con datos reales.</div>
+      <div class="adr-section">Decisión</div><div class="adr-body">Constante PRELOAD con 58 servicios de Abril 2026 embebida en el JS. Se usa como base al inicializar.</div>
+      <div class="adr-section">Consecuencias</div><div class="adr-body">✅ Zero-config — demo instantáneo. ❌ Actualizar servicios base requiere editar HTML. ❌ ~50KB extra en el archivo.</div>
+    </div>
+  </section>
+
+  <!-- 09 HALLAZGOS -->
+  <section class="section" id="s09">
+    <div class="section-title"><span class="section-num">09</span>Observaciones y Hallazgos</div>
+
+    <div class="issue-card sev-high">
+      <div class="issue-sev">Alto</div>
+      <div class="issue-content">
+        <div class="issue-title">Sin autenticación ni autorización</div>
+        <div class="issue-body">Cualquier persona con acceso a la URL puede leer y sobrescribir todos los datos SLA. <code>POST /api/data</code> y <code>GET /api/export</code> completamente abiertos.</div>
+        <div class="issue-rec">→ Agregar HTTP Basic Auth en Traefik o middleware Express. Alternativamente JWT simple para el equipo NOC.</div>
+      </div>
+    </div>
+
+    <div class="issue-card sev-high">
+      <div class="issue-sev">Alto</div>
+      <div class="issue-content">
+        <div class="issue-title">Race condition en escritura concurrente</div>
+        <div class="issue-body">Si dos usuarios guardan en menos de 15 segundos, el último sobrescribe sin merge. No hay optimistic locking ni detección de conflictos.</div>
+        <div class="issue-rec">→ Agregar version counter en el payload. El servidor rechaza POST si tiene un savedAt más reciente que el enviado por el cliente.</div>
+      </div>
+    </div>
+
+    <div class="issue-card sev-medium">
+      <div class="issue-sev">Medio</div>
+      <div class="issue-content">
+        <div class="issue-title">Directorio public/ ausente en desarrollo local</div>
+        <div class="issue-body"><code>server.js</code> sirve <code>../public/index.html</code> — path que solo existe en Docker (el Dockerfile copia el HTML ahí). Al correr <code>node api/server.js</code> directamente, el frontend no se sirve.</div>
+        <div class="issue-rec">→ Agregar script <code>npm run dev</code> que copie el HTML a <code>public/index.html</code> antes de iniciar.</div>
+      </div>
+    </div>
+
+    <div class="issue-card sev-medium">
+      <div class="issue-sev">Medio</div>
+      <div class="issue-content">
+        <div class="issue-title">Babel CDN en producción — overhead de transpilación</div>
+        <div class="issue-body">Babel Standalone (~900KB) se descarga y ejecuta en cada carga para transformar JSX. Sin Service Worker ni caché offline.</div>
+        <div class="issue-rec">→ Para v2, pre-transpilar con Babel CLI offline y eliminar dependencia de runtime. Considerar Vite como build tool para evolución futura.</div>
+      </div>
+    </div>
+
+    <div class="issue-card sev-medium">
+      <div class="issue-sev">Medio</div>
+      <div class="issue-content">
+        <div class="issue-title">Export XLS usa XML Spreadsheet, no XLSX real</div>
+        <div class="issue-body"><code>doExportXLS()</code> genera XML con MIME <code>application/vnd.ms-excel</code>. Excel moderno muestra aviso de compatibilidad.</div>
+        <div class="issue-rec">→ Usar XLSX.js (ya cargado lazy) con <code>XLSX.utils.json_to_sheet()</code> para generar .xlsx reales.</div>
+      </div>
+    </div>
+
+    <div class="issue-card sev-medium">
+      <div class="issue-sev">Medio</div>
+      <div class="issue-content">
+        <div class="issue-title">Sin CORS configurado</div>
+        <div class="issue-body">No hay headers CORS en server.js. Si se consume la API desde otro origen fallará.</div>
+        <div class="issue-rec">→ Agregar middleware <code>cors</code> con whitelist de orígenes permitidos.</div>
+      </div>
+    </div>
+
+    <div class="issue-card sev-low">
+      <div class="issue-sev">Bajo</div>
+      <div class="issue-content">
+        <div class="issue-title">allData crece indefinidamente mes a mes</div>
+        <div class="issue-body">Cada mes agrega un key. Sin archivado, en ~2 años el JSON puede superar varios MB degradando localStorage.</div>
+        <div class="issue-rec">→ Implementar archivado automático de meses con más de 12 meses de antigüedad.</div>
+      </div>
+    </div>
+
+    <div class="issue-card sev-low">
+      <div class="issue-sev">Bajo</div>
+      <div class="issue-content">
+        <div class="issue-title">Sin rate limiting en la API</div>
+        <div class="issue-body">No hay limitación de requests. <code>POST /api/data</code> acepta hasta 10MB sin restricciones.</div>
+        <div class="issue-rec">→ Agregar <code>express-rate-limit</code> con límite razonable para la red interna (ej. 60 req/min).</div>
+      </div>
+    </div>
+
+    <div class="issue-card sev-low">
+      <div class="issue-sev">Bajo</div>
+      <div class="issue-content">
+        <div class="issue-title">CDN sin Subresource Integrity (SRI)</div>
+        <div class="issue-body">Los 4 scripts CDN no tienen atributo <code>integrity</code>. Riesgo supply-chain teórico.</div>
+        <div class="issue-rec">→ Agregar <code>integrity="sha384-..."</code> a cada script CDN. Cloudflare provee los hashes en su interfaz.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface3);border:1px solid var(--border);border-left:3px solid var(--emerald);padding:16px 20px;margin-top:20px">
+      <div style="font-family:var(--font-mono);font-size:.6rem;color:var(--emerald);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em">✓ Fortalezas identificadas</div>
+      <div style="font-size:.74rem;color:var(--text);line-height:2">
+        ✅ Arquitectura dual-mode extremadamente portátil — funciona como archivo, con Node, o en Docker sin cambios<br/>
+        ✅ Seed automático en primer boot Docker — zero-config deployment<br/>
+        ✅ Lazy loading correcto de Chart.js y XLSX — primera carga ligera sin bundler<br/>
+        ✅ Docker HEALTHCHECK configurado con wget (compatible alpine sin curl)<br/>
+        ✅ docker-compose local y docker-compose.prod bien separados con comentarios claros<br/>
+        ✅ Lógica de color SLA con interpolación continua verde→amarillo→rojo — UX superior a semáforo binario<br/>
+        ✅ ChartCanvas wrapper correcto — destroy/recreate evita memory leaks de Chart.js<br/>
+        ✅ Multi-window sync simple pero funcional para el caso de uso del equipo NOC<br/>
+        ✅ Schema versioning (v:"5") preparado para migraciones futuras
+      </div>
+    </div>
+  </section>
+
+  <div class="report-footer">
+    <div>Análisis generado por <strong style="color:var(--cyan)">L. Domínguez</strong> — ldominguez@atisa.com</div>
+    <div>Claude Skills Engineering · ATISA Group · v3.0.0 · 18 mayo 2026</div>
+  </div>
+
+</main>
+</div>
+
+<script>
+function goTo(id, el){
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.toc-item').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+}
+const secs=['s01','s02','s03','s04','s05','s06','s07','s08','s09'];
+const tocs=document.querySelectorAll('.toc-item');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY||document.documentElement.scrollTop;
+  let a=0;
+  secs.forEach((id,i)=>{const el=document.getElementById(id);if(el&&el.offsetTop-120<=y)a=i;});
+  tocs.forEach((el,i)=>el.classList.toggle('active',i===a));
+},{passive:true});
+</script>
+</body>
+</html>

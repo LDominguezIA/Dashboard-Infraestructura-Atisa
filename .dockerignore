@@ -1,0 +1,8 @@
+.git
+.gitignore
+.claude
+node_modules
+*.md
+propuesta-docker-server.html
+reverse-engineering-report.html
+docker-compose.prod.yml

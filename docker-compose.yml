@@ -1,0 +1,31 @@
+# ============================================================
+# SLA Monitor — Dashboard Infraestructura ATISA
+# Modo: LOCAL (sin Traefik, sin dominio)
+# ============================================================
+# INICIAR:  docker compose up -d --build
+# LOGS:     docker compose logs -f
+# DETENER:  docker compose down
+# ABRIR:    http://localhost:3001
+#
+# Para producción con Traefik/SSL → ver docker-compose.prod.yml
+# ============================================================
+
+services:
+  sla-dashboard:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: sla-dashboard
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DATA_DIR=/data
+      - NODE_ENV=production
+    volumes:
+      - sla-data:/data
+
+volumes:
+  sla-data:
+    name: sla-monitor-data
